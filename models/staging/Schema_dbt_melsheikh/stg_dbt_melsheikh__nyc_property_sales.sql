@@ -11,7 +11,7 @@ source as (
 cleaned_data as (
     select
 
-        -- all uncleaned data
+        -- all data which do not need to be cleaned
         Borough_number,
         Borough_name,
         Sale_date,
@@ -19,11 +19,15 @@ cleaned_data as (
         Tax_block,
         Building_class_category,
         Neighborhood,
-        property_zip_code,
+
+        -- year built
         property_year_built,
 
+        -- zip code
+        property_zip_code,
+
         -- Sale price
-        (case when sale_price_int <= 10 then null else sale_price_int end) as Sale_price,
+        sale_price_int as Sale_price,
 
         -- Land square feet
         Land_square_feet_int,
@@ -87,8 +91,9 @@ cleaned_data as (
             "Block" as Tax_block,
             "Building_class_category" as Building_class_category,
             "Neighborhood" as Neighborhood,
-            "Zip_code" as property_zip_code,
-            "Year_built" as property_year_built,
+
+            -- hanlde year built
+            coalesce("Year_built", 0) as property_year_built, 
 
             -- handle Sale price
             try_cast(replace(replace(TRIM("Sale_price", ' '),',', ''),'$', '')as integer) as sale_price_int,
@@ -132,7 +137,11 @@ cleaned_data as (
                 ) as Apartment_number_address,
             
             -- get street number and details from the address
-            SPLIT(trim("Address", ' '), ',')[0] as Address
+            SPLIT(trim("Address", ' '), ',')[0] as Address,
+
+            -- handle nulls of zip code (replace by 0)
+            -- "Zip_code" as property_zip_code,
+            coalesce("Zip_code", 0) as property_zip_code
 
         FROM source)
 
