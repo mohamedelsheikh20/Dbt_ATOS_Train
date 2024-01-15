@@ -17,8 +17,7 @@ Tax_combination_dim as (
     select 
 
         ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) as Tax_class_ID,
-        tax_class_at_sale,
-        tax_class_at_present
+        *
         
     from Tax_class_distinct
 )
