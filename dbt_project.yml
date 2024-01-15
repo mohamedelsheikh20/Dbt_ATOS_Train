@@ -42,6 +42,5 @@ models:
       +materialized: table
 
     marts:
-      Schema_dbt_melsheikh:
-        +materialized: table
+      +materialized: table
 
