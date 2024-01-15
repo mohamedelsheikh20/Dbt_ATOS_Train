@@ -9,7 +9,7 @@ Borough_Dim as (
     select distinct
 
         borough_number as Borough_num_ID,
-        BOROUGH_NAME
+        borough_name
         
     from source
 )
