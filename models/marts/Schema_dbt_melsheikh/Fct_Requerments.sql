@@ -17,13 +17,9 @@ join_forign_keys as (
 
         -- Borough_number are already exist in the source + the other columns
         borough_number,
-        Tax_lot,
-        Tax_block,
-        Building_class_category,
-        Neighborhood,
-        property_zip_code,
         Sale_price,
         Gross_square_feet_int,
+        Land_square_feet_int,
         Residential_units_int,
         Commercial_units_int,
         Total_units_int,
