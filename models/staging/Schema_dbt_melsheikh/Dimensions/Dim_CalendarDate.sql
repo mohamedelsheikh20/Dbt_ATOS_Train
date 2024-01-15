@@ -19,10 +19,10 @@ sale_date as (
 built_date as (
     select 
     
-        try_cast(property_year_built as int) as date_yyyymmdd_id,
+        cast(property_year_built as int) as date_yyyymmdd_id,
         00 as date_day,
         00 as date_month,
-        try_cast(property_year_built as int) as date_year
+        cast(property_year_built as int) as date_year
 
     from source
 ),
