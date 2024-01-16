@@ -6,7 +6,7 @@ Location_Dim as (
     
         *
 
-    from DIM_LOCATION
+    from {{ ref('Dim_Location') }}
 ),
 
 

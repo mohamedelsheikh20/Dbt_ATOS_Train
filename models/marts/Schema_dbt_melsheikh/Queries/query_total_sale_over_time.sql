@@ -7,7 +7,7 @@ Fact as (
      sale_price,
      sale_date_id
     
-    from fct_requerments
+    from {{ ref('Fct_Requerments') }}
 ),
 
 Calendar_Dim as (
@@ -15,7 +15,7 @@ Calendar_Dim as (
 
         *
 
-    from dim_calendardate
+    from {{ ref('Dim_CalendarDate') }}
 ),
 
 
