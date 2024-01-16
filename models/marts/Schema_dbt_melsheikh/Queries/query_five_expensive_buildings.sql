@@ -40,7 +40,7 @@ join_Dim_Fact as (
     inner join Location_Dim LD on LD.original_location_id = F.location_id
 ),
 
-neighbourhood_num as (
+sale_salary_per_building as (
     select
         
         sum(sale_price) as sum_sale_salary,
@@ -56,11 +56,12 @@ neighbourhood_num as (
 
 
 show_data as (
+    
     select
     
         *
     
-    from neighbourhood_num
+    from sale_salary_per_building
     order by sum_sale_salary desc
     limit 5
 )
