@@ -1,3 +1,6 @@
+-- Calculate the average sale price per borough.
+
+
 with 
 
 Fact as (

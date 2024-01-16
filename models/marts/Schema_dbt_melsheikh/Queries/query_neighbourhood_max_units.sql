@@ -1,3 +1,5 @@
+-- Find the neighborhood with the most total units.
+
 with 
 
 Fact as (

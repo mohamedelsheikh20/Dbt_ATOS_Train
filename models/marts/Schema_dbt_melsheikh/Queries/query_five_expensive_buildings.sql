@@ -1,3 +1,6 @@
+-- Identify the top 5 most expensive buildings based on sale price.
+
+
 with 
 
 Fact as (
@@ -13,49 +16,41 @@ Fact as (
 Location_Dim as (
     select
 
-        *
+        MIN(location_id) AS original_location_id, -- get the first (min) Id to use
+        BOROUGH_NAME, TAX_LOT, TAX_BLOCK
 
     from {{ ref('Dim_Location') }}
+    group by BOROUGH_NAME, TAX_LOT, TAX_BLOCK
 ),
-
-
+ 
 
 join_Dim_Fact as (
 
     select
 
-    sale_price,
-    F.location_id,
-    borough_name,
-    neighborhood,
-    property_zip_code,
-    tax_lot,
-    tax_block
+        sale_price,
+        LD.original_location_id,
+        borough_name,
+        tax_lot,
+        tax_block
 
     from Fact F
-    left join Location_Dim LD on LD.location_id = F.location_id
+    -- here I used inner join to neglect all nulls location id
+    -- because of group by BOROUGH_NAME, TAX_LOT, TAX_BLOCK and neglect neigh - zip code
+    inner join Location_Dim LD on LD.original_location_id = F.location_id
 ),
-
--- select * from join_Dim_Fact
-
 
 neighbourhood_num as (
     select
         
-        -- *
         sum(sale_price) as sum_sale_salary,
-        -- location_id
         borough_name,
-        neighborhood,
-        property_zip_code,
         tax_lot,
         tax_block
 
     from join_Dim_Fact
-    -- group by location_id  -- why can't I group by location ID
-    group by borough_name, neighborhood,
-        property_zip_code, tax_lot, tax_block
-
+    
+    group by borough_name, tax_lot, tax_block  -- because building define by borough, lot, block
     having sum_sale_salary is not null
 ),
 

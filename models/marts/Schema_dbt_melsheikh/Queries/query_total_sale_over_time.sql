@@ -1,11 +1,13 @@
+-- Calculate the total sale price over time by different date parts.
+
 with 
 
 Fact as (
 
     select 
 
-     sale_price,
-     sale_date_id
+        sale_price,
+        sale_date_id
     
     from {{ ref('Fct_Requerments') }}
 ),
@@ -24,10 +26,10 @@ join_Dim_Fact as (
 
     select
     
-    sale_price, 
-    date_day,
-    date_month,
-    date_year
+        sale_price, 
+        date_day,
+        date_month,
+        date_year
 
     from Fact F
     left join Calendar_Dim CD on CD.date_yyyymmdd_id = F.sale_date_id

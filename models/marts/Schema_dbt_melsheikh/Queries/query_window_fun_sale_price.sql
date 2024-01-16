@@ -1,11 +1,13 @@
+-- Use a window function to calculate the running total of Sales price.
+
 with 
 
 Fact as (
 
     select 
 
-     sale_price,
-     sale_date_id
+        sale_price,
+        sale_date_id
     
     from {{ ref('Fct_Requerments') }}
 ),

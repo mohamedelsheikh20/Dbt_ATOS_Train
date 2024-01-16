@@ -1,3 +1,7 @@
+-- Create a new column with the difference in years between sale date and year built. 
+--      Group the data by this new column and analyze the distribution of sale price.
+
+
 with 
 
 Fact as (
@@ -9,6 +13,9 @@ Fact as (
      year_built_date_id
     
     from {{ ref('Fct_Requerments') }}
+
+    -- in year_built_date_id there are unwanted values like (1111, 0) so we neglect them
+    where year_built_date_id > 1111
 ),
 
 

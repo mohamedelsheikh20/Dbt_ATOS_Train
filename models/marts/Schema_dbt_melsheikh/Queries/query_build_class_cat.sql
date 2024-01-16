@@ -1,3 +1,5 @@
+-- Identify the building class category with the highest average land square feet.
+
 with 
 
 Fact as (
@@ -31,7 +33,7 @@ avg_land_square as (
     from Fact f
     left join Building_Dim BD on BD.building_class_id = f.building_class_id
 
-    where f.land_square_feet_int is not null
+    where f.land_square_feet_int is not null  -- to order them desc
     group by BD.building_class_category
 ),
 
