@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_dbt_melsheikh__nyc_property_sales
+    description: Staged sales data from AWS S3 bucket dataset.
