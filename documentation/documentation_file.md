@@ -69,7 +69,8 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
 
 ### Star Schema Structure used.
 
-![Alt text](./NYC Sales Star Schema System.png)
+![NYC Sales Star Schema System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/69e92f2c-a702-42a3-8617-7bbf15326479)
+
 
 As the image shows there are `Fact table` with four `Dimension tables`:
 1. Req Fact Table:
