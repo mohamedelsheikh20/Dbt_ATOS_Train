@@ -52,7 +52,8 @@ join_forign_keys as (
     -- add the building class foriegn key
     left join building_class_data bld on
         bld.building_class_at_sale = s.building_class_at_sale and
-        bld.building_class_at_present = s.building_class_at_present
+        bld.building_class_at_present = s.building_class_at_present and
+        bld.building_class_category = s.building_class_category
 
     left join location_data L on
         L.borough_name = s.borough_name and
