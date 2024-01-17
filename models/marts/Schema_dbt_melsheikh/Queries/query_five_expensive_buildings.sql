@@ -7,8 +7,8 @@ Fact as (
 
     select 
 
-     sale_price,
-     location_id
+        sale_price,
+        location_id
     
     from {{ ref('Fct_Requerments') }}
 ),
@@ -16,11 +16,11 @@ Fact as (
 Location_Dim as (
     select
 
-        MIN(location_id) AS original_location_id, -- get the first (min) Id to use
-        BOROUGH_NAME, TAX_LOT, TAX_BLOCK
+        min(location_id) as original_location_id, -- get the first (min) Id to use
+        borough_name, tax_lot, tax_block
 
     from {{ ref('Dim_Location') }}
-    group by BOROUGH_NAME, TAX_LOT, TAX_BLOCK
+    group by borough_name, tax_lot, tax_block
 ),
  
 

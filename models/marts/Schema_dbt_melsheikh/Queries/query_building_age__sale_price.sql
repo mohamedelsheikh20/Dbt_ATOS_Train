@@ -9,23 +9,23 @@ Fact as (
     select 
 
         sale_price,
-        YEAR_BUILT_DATE_ID
+        year_built_date_id
     
     from {{ ref('Fct_Requerments') }}
-    where YEAR_BUILT_DATE_ID <> 1111 -- 1111 wrong, but 0 is unknown
+    where year_built_date_id <> 1111 -- 1111 wrong, but 0 is unknown
 ),
 
 age_cat_price as (
     select 
     
-        YEAR_BUILT_DATE_ID as age_category,
+        year_built_date_id as age_category,
         sum(sale_price) as sum_sale_price,
         avg(sale_price) as avg_sale_price,
         min(sale_price) as min_sale_price,
         max(sale_price) as max_sale_price
 
     from Fact
-    group by YEAR_BUILT_DATE_ID
+    group by year_built_date_id
 )
 
 select * from age_cat_price

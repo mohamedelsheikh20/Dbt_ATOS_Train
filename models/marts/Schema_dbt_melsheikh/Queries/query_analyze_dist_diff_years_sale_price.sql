@@ -8,9 +8,9 @@ Fact as (
 
     select 
 
-     sale_price,
-     sale_date_id,
-     year_built_date_id
+        sale_price,
+        sale_date_id,
+        year_built_date_id
     
     from {{ ref('Fct_Requerments') }}
 
@@ -24,6 +24,8 @@ get_year_diff as (
     select 
 
         sale_price,
+        -- sale_date_id like "20181212" / 10000 = 2018.1212 using cast int will be the year "2018"
+        -- year_built_date_id will be like "1996"
         (cast(sale_date_id / 10000 as int) - year_built_date_id) as diff_year
 
     

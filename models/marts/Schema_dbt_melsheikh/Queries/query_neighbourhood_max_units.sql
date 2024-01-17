@@ -6,8 +6,8 @@ Fact as (
 
     select 
 
-     total_units_int,
-     location_id
+        total_units_int,
+        location_id
     
     from {{ ref('Fct_Requerments') }}
 ),

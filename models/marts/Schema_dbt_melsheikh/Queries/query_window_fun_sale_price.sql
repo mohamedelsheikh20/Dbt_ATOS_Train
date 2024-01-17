@@ -18,7 +18,6 @@ Calendar_Dim as (
         *
 
     from {{ ref('Dim_CalendarDate') }}
-
 ),
 
 
@@ -42,7 +41,7 @@ running_total_sale_price as (
         date_month,
         date_day,
         sale_price,
-        SUM(sale_price) OVER (ORDER BY date_year, date_month, date_day) AS running_total
+        sum(sale_price) over (order by date_year, date_month, date_day) as running_total
     
     FROM join_Dim_Fact
 

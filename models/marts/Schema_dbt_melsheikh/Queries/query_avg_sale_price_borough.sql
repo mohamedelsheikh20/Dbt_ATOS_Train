@@ -7,8 +7,8 @@ Fact as (
 
     select 
 
-     sale_price,
-     location_id
+        sale_price,
+        location_id
     
     from {{ ref('Fct_Requerments') }}
 

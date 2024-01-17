@@ -7,8 +7,8 @@ Fact as (
 
     select 
 
-     sale_price,
-     location_id
+        sale_price,
+        location_id
     
     from {{ ref('Fct_Requerments') }}
 ),
@@ -16,11 +16,11 @@ Fact as (
 Location_Dim as (
     select
 
-        MIN(location_id) AS original_location_id, -- get the first (min) Id to use
-        BOROUGH_NAME, TAX_LOT, TAX_BLOCK
+        min(location_id) AS original_location_id, -- get the first (min) Id to use
+        borough_name, tax_lot, tax_block
 
     from {{ ref('Dim_Location') }}
-    group by BOROUGH_NAME, TAX_LOT, TAX_BLOCK
+    group by borough_name, tax_lot, tax_block
 ),
  
 
@@ -36,12 +36,12 @@ join_Dim_Fact as (
 
     from Fact F
     -- here I used inner join to neglect all nulls location id
-    -- because of group by BOROUGH_NAME, TAX_LOT, TAX_BLOCK and neglect neigh - zip code
+    -- because of group by borough_name, tax_lot, tax_block and neglect columns neighbourhood - zip code
     inner join Location_Dim LD on LD.original_location_id = F.location_id
 ),
 
 sale_salary_per_building as (
-    select distinct
+    select  -- distinct
         
         sale_price,
         borough_name,
@@ -49,7 +49,7 @@ sale_salary_per_building as (
         tax_block,
 
         -- rank sale price for each bulding (borough, lot, block) from smaller
-        RANK() OVER (PARTITION BY borough_name, tax_lot, tax_block ORDER BY sale_price) AS price_rank
+        rank() over (partition by borough_name, tax_lot, tax_block order by sale_price) as price_rank
 
 
     from join_Dim_Fact

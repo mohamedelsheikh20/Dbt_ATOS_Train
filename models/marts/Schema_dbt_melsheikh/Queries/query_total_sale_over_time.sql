@@ -13,6 +13,7 @@ Fact as (
 ),
 
 Calendar_Dim as (
+    
     select
 
         *

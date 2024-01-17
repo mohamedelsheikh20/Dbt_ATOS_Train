@@ -5,7 +5,7 @@ with
 Location_Dim as (
     select
 
-        min(location_id) as location_id , -- because it can't be aggregated to I take the min id
+        min(location_id) as location_id , -- because it can't be aggregated unique IDs to I take the min/first id
         borough_name, tax_lot, tax_block
 
     from {{ ref('Dim_Location') }}

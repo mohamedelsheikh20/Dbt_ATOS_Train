@@ -3,7 +3,6 @@
 with 
 
 Fact as (
-
     select 
 
         sale_price,
@@ -22,7 +21,6 @@ Tax_Dim as (
 
 
 join_Dim_Fact as (
-
     select
 
         sale_price,

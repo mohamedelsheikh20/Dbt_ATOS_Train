@@ -6,8 +6,8 @@ Fact as (
 
     select 
 
-     building_class_id,
-     land_square_feet_int
+        building_class_id,
+        land_square_feet_int
     
     from {{ ref('Fct_Requerments') }}
 ),
