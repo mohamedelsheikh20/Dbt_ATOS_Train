@@ -6,7 +6,7 @@ Fact as (
     select 
 
         sale_price,
-        TAX_CLASS_ID
+        tax_class_id
     
     from {{ ref('Fct_Requerments') }}
 ),

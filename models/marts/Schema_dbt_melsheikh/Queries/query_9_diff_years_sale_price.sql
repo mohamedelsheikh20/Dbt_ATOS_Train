@@ -10,12 +10,12 @@ Fact as (
 
         sale_price,
         sale_date_id,
-        year_built_date_id
+        year_built_date
     
     from {{ ref('Fct_Requerments') }}
 
-    -- in year_built_date_id there are unwanted values like (1111, 0) so we neglect them
-    where year_built_date_id > 1111
+    -- in year_built_date there are unwanted values like (1111, 0) so we neglect them
+    where year_built_date > 1111
 ),
 
 
@@ -26,7 +26,7 @@ get_year_diff as (
         sale_price,
         -- sale_date_id like "20181212" / 10000 = 2018.1212 using cast int will be the year "2018"
         -- year_built_date_id will be like "1996"
-        (cast(sale_date_id / 10000 as int) - year_built_date_id) as diff_year
+        (cast(sale_date_id / 10000 as int) - year_built_date) as diff_year
 
     
     from Fact

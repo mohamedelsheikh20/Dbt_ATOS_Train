@@ -25,22 +25,24 @@ join_forign_keys as (
         Residential_units_int,
         Commercial_units_int,
         Total_units_int,
+        
+        -- degenerate dim
         Address,
         apartment_number,
+        cast(property_year_built as int) as year_built_date,
 
-        -- Building class
+        -- Building class dim
         tx.Tax_class_ID,
 
-        -- Tax class
+        -- Tax class dim
         bld.Building_class_ID,
 
-        -- Location
+        -- Location dim
         L.Location_ID,
 
 
-        -- Calendar date
-        to_number(TO_VARCHAR(Sale_date, 'YYYYMMDD')) as Sale_Date_ID,
-        cast(property_year_built as int) as Year_built_Date_ID
+        -- Calendar date dim
+        to_number(to_varchar(Sale_date, 'YYYYMMDD')) as Sale_Date_ID
 
     from source s
     
@@ -55,6 +57,7 @@ join_forign_keys as (
         bld.building_class_at_present = s.building_class_at_present and
         bld.building_class_category = s.building_class_category
 
+    -- add the location foriegn key
     left join location_data L on
         L.borough_name = s.borough_name and
         L.neighborhood = s.neighborhood and

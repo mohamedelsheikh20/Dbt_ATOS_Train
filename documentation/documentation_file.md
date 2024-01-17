@@ -9,7 +9,7 @@ Neighborhood - Address - Sale price - Number of units - Square footage - Transac
 ---
 
 
-# Table of Contents
+## Table of Contents
 
 
 1. [Introduction](#introduction)
@@ -111,7 +111,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
 
 ### Star Schema Structure used.
 
-![NYC Sales Star Schema System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/69e92f2c-a702-42a3-8617-7bbf15326479)
+![NYC Sales Star Schema System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/476fec4d-9087-47f5-9ad6-3caa8c8b990f)
 
 
 As the image shows there are `Fact table` with four `Dimension tables`:
@@ -134,7 +134,7 @@ As the image shows there are `Fact table` with four `Dimension tables`:
 
 
 4. Calendar date dimension:
-   1. Dimension that holds all date in the date set (built year - sale date).
+   1. Dimension that holds sale date in date set.
    
 
 5. Location dimension:
@@ -245,11 +245,8 @@ All config will be found in `yml` files.
 #### Description:
 * Using related distinct columns of any date:
   * building_class_at_presentSale_date.
-  * property_year_built.
 * Add primary key:
   * Sale_date: same date but concatenated like `YYYYMMDD`.
-  * property_year_built: year date like `YYYY` with setting day and month with zeros.
-* Union both dates id to be stored in the dimension.
 
 
 ### Location dimension
@@ -374,10 +371,9 @@ Query to use a window function to calculate the running total of Sales price.
 #### Description:
 Query to create a new column with the difference in years between sale date and year built. Group the data by this new column and analyze the distribution of sale price.
 
-- There is no need to join calendar dim, because all what we need the year.
 - Do the year difference by doing some operation on IDs of dates (numeric values).
   -     sale_date_id like "20181212" / 10000 = 2018.1212 using cast int will be the year "2018"
-        year_built_date_id will be like "1996"
+        year_built_date will be like "1996"
 
 - remove any negative results `wrong input`.
 - Finally, analyze the output of the price with `sum - avg - min - max`.
