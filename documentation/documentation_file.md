@@ -6,6 +6,48 @@ data set from AWS S3 bucket [Data link](https://aws.amazon.com/marketplace/pp/pr
 Neighborhood - Address - Sale price - Number of units - Square footage - Transaction date - Year built.
 * Data Dictionary: [Data Dictionary link](https://www1.nyc.gov/assets/finance/downloads/pdf/07pdf/glossary_rsf071607.pdf).
 
+---
+
+
+# Table of Contents
+
+
+1. [Introduction](#introduction)
+2. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+3. [Project Structure](#project-structure)
+   - [High-level structure of dbt project, including folders and files](#high-level-structure-of-dbt-project-including-folders-and-files)
+   - [Star Schema Structure used](#star-schema-structure-used)
+4. [Configuration](#configuration)
+   - [Sources](#sources)
+   - [Staging yml](#staging-yml)
+   - [Dbt project yml](#dbt-project-yml)
+5. [Models](#models)
+   - [Stage model](#stage-model)
+   - [Dimension models](#dimension-models)
+      - [Tax class dimension](#tax-class-dimension)
+      - [Building class dimension](#building-class-dimension)
+      - [Calendar date dimension](#calendar-date-dimension)
+      - [Location dimension](#location-dimension)
+   - [Fact model](#fact-model)
+      - [Fct Requirements fact](#fct-requirements-fact)
+6. [Queries](#queries)
+   - [Query 1: avg sale price borough](#query-1-avg-sale-price-borough)
+   - [Query 2: neighbourhood max units](#query-2-neigh-max-units)
+   - [Query 3: build class cat](#query-3-build-class-cat)
+   - [Query 4: different dim building](#query-4-different-dim-building)
+   - [Query 5: total sale over time](#query-5-total-sale-over-time)
+   - [Query 6: tax class avg sale](#query-6-tax-class-avg-sale)
+   - [Query 7: five expensive buildings](#query-7-five-expensive-buildings)
+   - [Query 8: window fun sale price](#query-8-window-fun-sale-price)
+   - [Query 9: analyze dist diff years sale price](#query-9-analyze-dist-diff-years-sale-price)
+   - [Query 10: find buildings sold multiple times](#query-10-find-buildings-sold-multiple-times)
+   - [Query 11: building age sale price](#query-11-building-age-sale-price)
+7. [Tests](#tests)
+8. [Common Issues](#common-issues)
+   - [Main source snowflake Table](#main-source-snowflake-table)
+9. [License](#license)
 
 ---
 ## Introduction
@@ -39,17 +81,17 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
     * marts/
       * Schema_dbt_melsheikh/
         * Queries/
-          * query_analyze_dist_diff_years_sale_price.sql
-          * query_avg_sale_price_borough.sql
-          * query_build_class_cat.sql
-          * query_building_age__sale_price.sql
-          * query_different_dim_building.sql
-          * query_find_buildings_sold_multiple_times.sql
-          * query_five_expensive_buildings.sql
-          * query_neighbourhood_max_units.sql
-          * query_tax_class_avg_sale.sql
-          * query_total_sale_over_time.sql
-          * query_window_fun_sale_price.sql
+          * query_9_diff_years_sale_price.sql
+          * query_1_avg_sale_price_borough.sql
+          * query_3_build_class_cat.sql
+          * query_11_building_age_sale_price.sql
+          * query_4_different_dim_building.sql
+          * query_10_buildings_sold_multiple_times.sql
+          * query_7_five_expensive_buildings.sql
+          * query_2_neigh_max_units.sql
+          * query_6_tax_class_avg_sale.sql
+          * query_5_total_sale_over_time.sql
+          * query_8_window_fun_sale_price.sql
         * Fct_Requerments.sql
         
     * staging/
@@ -175,10 +217,10 @@ All config will be found in `yml` files.
 
     
 
-### Dimension models: 
+### Dimension models:
 (all dimensions take the same source from the only exist stage model)
 
-### -) Tax class dimension
+### Tax class dimension
 #### path: models/staging/Schema_dbt_melsheikh/Dimensions/Dim_Tax_class.sql
 #### Description:
 * Using related distinct columns:
@@ -188,7 +230,7 @@ All config will be found in `yml` files.
 
 
 
-### -) Building class dimension
+### Building class dimension
 #### path: models/staging/Schema_dbt_melsheikh/Dimensions/Dim_Building_class.sql
 #### Description:
 * Using related distinct columns:
@@ -198,7 +240,7 @@ All config will be found in `yml` files.
 * Add primary key generated key using the row number.
 
 
-### -) Calendar date dimension
+### Calendar date dimension
 #### path: models/staging/Schema_dbt_melsheikh/Dimensions/Dim_CalendarDate.sql
 #### Description:
 * Using related distinct columns of any date:
@@ -210,7 +252,7 @@ All config will be found in `yml` files.
 * Union both dates id to be stored in the dimension.
 
 
-### -) Location dimension
+### Location dimension
 #### path: models/staging/Schema_dbt_melsheikh/Dimensions/Dim_Location.sql
 #### Description:
 * Using related distinct columns:
@@ -221,12 +263,12 @@ All config will be found in `yml` files.
   * tax_block.
 * Add primary key generated key using the row number.
 
-### Fact model: 
+### Fact model:
 Fact table model which use the previous dimension tables to join the primary
 key of them as a foreign key in fact table, also use the stage of cleaning date
 which is in the source. 
 
-### -) Fct Requirements fact
+### Fct Requirements fact
 #### path: models/marts/Schema_dbt_melsheikh/Fct_Requerments.sql
 #### Description:
 1. Main fact measures columns:
@@ -245,8 +287,90 @@ which is in the source.
 ## Queries
 
 
-### -) Query: analyze dist diff years sale price
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_analyze_dist_diff_years_sale_price.sql 
+
+### Query 1: avg sale price borough
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_1_avg_sale_price_borough.sql 
+#### Description:
+Query to calculate the average sale price per borough.
+
+- Join fact and location dimension in `location_id`.
+- Group by `borough_name` and get the `avg` of the `sale_price`.
+
+
+### Query 2: neigh max units
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_2_neigh_max_units.sql 
+#### Description:
+Query to find the neighborhood with the most total units.
+
+- Join fact and location dimension in `location_id`.
+- Group by `neighborhood`.
+- Get the max `total_units_int` without any nulls or zeros.
+
+
+### Query 3: build class cat
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_3_build_class_cat.sql 
+#### Description:
+Query to identify the building class category with the highest average land square feet.
+
+- Join fact and building dimension in `building_class_id`.
+- Group by `building_class_category`.
+- Finally, analyze the output of the price with `sum - avg - min - max`.
+
+
+### Query 4: different dim building
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_4_different_dim_building.sql 
+#### Description:
+Query to Count the number of buildings by different dimensions using only (borough - lot - block).
+
+- No need to fact because we only need to count the building by different dimensions.
+- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
+- Group by the output one time for the 3 dimension `borough_name, tax_lot, tax_block`.
+- Union the output with `concate each one of 3 dim with the name corresponding to it`.
+
+
+### Query 5: total sale over time
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_5_total_sale_over_time.sql 
+#### Description:
+Query to calculate the total sale price over time by different date parts.
+
+- Join fact and calendar date dimension in `sale_date_id`.
+- Do operation on each year using `where` and group by month for each year months.
+- Finally, union all the results together.
+
+
+
+### Query 6: tax class avg sale
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_6_tax_class_avg_sale.sql 
+#### Description:
+Query to group the data by tax class at present and tax class at time of sale and compare the average sale price for each combination.
+
+- Join fact and tax dimension in `tax_class_id`.
+- Group by `tax_class_at_sale and tax_class_at_present` get the avg `sale_price`.
+
+
+
+### Query 7: five expensive buildings
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_7_five_expensive_buildings.sql 
+#### Description:
+Query to identify the top 5 most expensive buildings based on sale price.
+
+- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
+- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.
+- Remove null, and order descending to get the first/max five buildings.
+
+
+
+### Query 8: window fun sale price
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_8_window_fun_sale_price.sql
+#### Description:
+Query to use a window function to calculate the running total of Sales price.
+
+- Join fact and calendar date dimension in `sale_date_id`.
+- Using window function to calculate the running total of Sales price `order by year, month then day` then sum the price.
+
+
+### Query 9: analyze dist diff years sale price
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_9_diff_years_sale_price.sql 
 #### Description:
 Query to create a new column with the difference in years between sale date and year built. Group the data by this new column and analyze the distribution of sale price.
 
@@ -260,29 +384,18 @@ Query to create a new column with the difference in years between sale date and 
 
 
 
-### -) Query: avg sale price borough
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_avg_sale_price_borough.sql 
+### Query 10: find buildings sold multiple times
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_10_buildings_sold_multiple_times.sql 
 #### Description:
-Query to calculate the average sale price per borough.
+Query to implement a logic to find buildings sold multiple times and compare their sale price across each transaction.
 
-- Join fact and location dimension in `location_id`.
-- Group by `borough_name` and get the `avg` of the `sale_price`.
-
-
-
-### -) Query: build class cat
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_build_class_cat.sql 
-#### Description:
-Query to identify the building class category with the highest average land square feet.
-
-- Join fact and building dimension in `building_class_id`.
-- Group by `building_class_category`.
-- Finally, analyze the output of the price with `sum - avg - min - max`.
+- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
+- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.
+- Select all buildings and use rank window function to rank sale price for each building.
 
 
-
-### -) Query: building age sale price
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_building_age__sale_price.sql 
+### Query 11: building age sale price
+#### path: models/marts/Schema_dbt_melsheikh/Queries/query_11_building_age_sale_price.sql 
 #### Description:
 Query to determine the building age category based on year built, and then use it to analyze the relationship between 
 building age and sale price.
@@ -292,74 +405,6 @@ building age and sale price.
 - Group by `year_built_date_id`.
 - Finally, analyze the output of the price with `sum - avg - min - max`.
 
-
-### -) Query: different dim building
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_different_dim_building.sql 
-#### Description:
-Query to Count the number of buildings by different dimensions using only (borough - lot - block).
-
-- No need to fact because we only need to count the building by different dimensions.
-- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
-- Group by the output one time for the 3 dimension `borough_name, tax_lot, tax_block`.
-- Union the output with `concate each one of 3 dim with the name corresponding to it`.
-
-
-### -) Query: find buildings sold multiple times
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_find_buildings_sold_multiple_times.sql 
-#### Description:
-Query to implement a logic to find buildings sold multiple times and compare their sale price across each transaction.
-
-- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
-- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.
-- Select all buildings and use rank window function to rank sale price for each building.
-
-
-### -) Query: five expensive buildings
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_five_expensive_buildings.sql 
-#### Description:
-Query to identify the top 5 most expensive buildings based on sale price.
-
-- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.
-- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.
-- Remove null, and order descending to get the first/max five buildings.
-
-
-### -) Query: neighbourhood max units
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_neighbourhood_max_units.sql 
-#### Description:
-Query to find the neighborhood with the most total units.
-
-- Join fact and location dimension in `location_id`.
-- Group by `neighborhood`.
-- Get the max `total_units_int` without any nulls or zeros.
-
-
-### -) Query: tax class avg sale
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_tax_class_avg_sale.sql 
-#### Description:
-Query to group the data by tax class at present and tax class at time of sale and compare the average sale price for each combination.
-
-- Join fact and tax dimension in `tax_class_id`.
-- Group by `tax_class_at_sale and tax_class_at_present` get the avg `sale_price`.
-
-
-### -) Query: total sale over time
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_total_sale_over_time.sql 
-#### Description:
-Query to calculate the total sale price over time by different date parts.
-
-- Join fact and calendar date dimension in `sale_date_id`.
-- Do operation on each year using `where` and group by month for each year months.
-- Finally, union all the results together.
-
-
-### -) Query: window fun sale price
-#### path: models/marts/Schema_dbt_melsheikh/Queries/query_window_fun_sale_price.sql
-#### Description:
-Query to use a window function to calculate the running total of Sales price.
-
-- Join fact and calendar date dimension in `sale_date_id`.
-- Using window function to calculate the running total of Sales price `order by year, month then day` then sum the price.
 
 ---
 ## Tests
