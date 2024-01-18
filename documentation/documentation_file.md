@@ -341,7 +341,9 @@ Query to calculate the total sale price over time by different date parts.
 Query to group the data by tax class at present and tax class at time of sale and compare the average sale price for each combination.
 
 - Join fact and tax dimension in `tax_class_id`.
-- Group by `tax_class_at_sale and tax_class_at_present` get the avg `sale_price`.
+- Get average of tax at sale.
+- Get average of tax at present then get only the main tax class (from 1 to 4).
+- Using cross join to get all combinations then compare it with `difference and check the bigger value`.
 
 
 
