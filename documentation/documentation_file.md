@@ -111,8 +111,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
 
 ### Star Schema Structure used.
 
-![NYC Sales Star Schema System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/476fec4d-9087-47f5-9ad6-3caa8c8b990f)
-
+![NYC Sales Star Schema System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/861ba231-e918-4a2e-9290-609272e72b6d)
 
 As the image shows there are `Fact table` with four `Dimension tables`:
 1. Req Fact Table:
@@ -243,10 +242,10 @@ All config will be found in `yml` files.
 ### Calendar date dimension
 #### path: models/staging/Schema_dbt_melsheikh/Dimensions/Dim_CalendarDate.sql
 #### Description:
-* Using related distinct columns of any date:
-  * building_class_at_presentSale_date.
+* Using related distinct columns of dates:
 * Add primary key:
   * Sale_date: same date but concatenated like `YYYYMMDD`.
+* Add the date, and extract from it `day - month - year`.
 
 
 ### Location dimension

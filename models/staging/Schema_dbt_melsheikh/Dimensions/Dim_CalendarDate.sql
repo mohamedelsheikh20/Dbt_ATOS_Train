@@ -5,10 +5,11 @@ source as (
 ),
 
 
-sale_date as (
+sale_date_data as (
     select 
 
         to_number(to_varchar(Sale_date, 'YYYYMMDD')) as date_yyyymmdd_id,
+        Sale_date,
         day(Sale_date) as date_day,
         month(Sale_date) as date_month,
         year(Sale_date) as date_year
@@ -22,7 +23,7 @@ Calendar_dim as (
 
         *
     
-    from sale_date
+    from sale_date_data
 
 )
 
