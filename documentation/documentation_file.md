@@ -300,7 +300,7 @@ Query to find the neighborhood with the most total units.
 
 - Join fact and location dimension in `location_id`.
 - Group by `neighborhood`.
-- Get the max `total_units_int` without any nulls or zeros.
+- Get the sum `total_units_int` without any nulls or zeros.
 
 
 ### Query 3: build class cat

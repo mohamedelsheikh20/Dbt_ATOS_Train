@@ -25,7 +25,7 @@ Location_Dim as (
 
 Max_units_neighbourhoods as (
     select
-        max(f.total_units_int) as neighbouhood_max,
+        sum(f.total_units_int) as neighbouhood_max,
         LD.neighborhood
 
     from Fact f
