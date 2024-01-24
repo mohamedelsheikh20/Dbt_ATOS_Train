@@ -38,9 +38,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbt_ATOS_Train:
     # Applies to all files under models/staging/
-    staging:
-      +materialized: table
-
     marts:
       +materialized: table
 

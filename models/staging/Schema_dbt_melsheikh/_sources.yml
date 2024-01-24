@@ -1,9 +1,0 @@
-version: 2
-
-sources:
-  - name: dbt_melsheikh
-    description: This is the main schema contain the data
-    database: pc_dbt_db
-    tables:
-      - name: nyc_property_sales
-        description: table contain all NYC Property sales for years 2016, 2017, 2018
