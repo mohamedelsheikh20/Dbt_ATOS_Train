@@ -1,4 +1,7 @@
-Welcome to your new dbt project!
+# Dbt ATOS Project 
+
+## Go throught the whole project Documentation
+go to the file in the documentation folder [Doc md file](documentation/documentation_file.md)
 
 ### Using the starter project
 
