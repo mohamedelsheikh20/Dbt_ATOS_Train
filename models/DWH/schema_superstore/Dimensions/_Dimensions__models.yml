@@ -1,0 +1,14 @@
+version: 2
+
+models:
+  - name: dim_calendar_date
+    description: Calendar date dimension table to store all dates info.
+
+    columns:
+      - name: date_id
+        tests:
+          - unique
+          - not_null
+          # - relationships:
+          #     to: ref('model_name')
+          #     field: field_name
