@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: schema_superstore
+    description: This is the main schema contain the sample of super store data
+    database: pc_dbt_db
+    tables:
+      - name: superstore_sample
+        description: table contain sample of the Superstore Dataset

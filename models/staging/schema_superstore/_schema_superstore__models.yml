@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: stg_schema_superstore__superstore_sample
+    description: Stage to get replica of cleaned data of the table.
