@@ -1,0 +1,27 @@
+version: 2
+
+models:  # dimensions of the DWH 
+  - name: dim_calendar_date
+    description: Calendar date dimension table to store all dates info.
+
+    columns:
+      - name: date_id
+        tests:
+          - unique
+          - not_null
+          # - relationships:
+          #     to: ref('model_name')
+          #     field: field_name
+
+
+  - name: dim_customer
+    description: Customers dimension table to store each customer info.
+
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+          # - relationships:
+          #     to: ref('model_name')
+          #     field: field_name
