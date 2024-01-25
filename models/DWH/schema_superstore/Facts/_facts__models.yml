@@ -23,13 +23,13 @@ models:  # dimensions of the DWH
               to: ref('dim_location')
               field: location_id
 
-      - name: date_id_order
+      - name: order_date_id
         tests:
           - relationships:
               to: ref('dim_calendar_date')
               field: date_id
 
-      - name: date_id_ship
+      - name: ship_date_id
         tests:
           - relationships:
               to: ref('dim_calendar_date')
