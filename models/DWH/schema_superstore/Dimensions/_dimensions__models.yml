@@ -25,3 +25,16 @@ models:  # dimensions of the DWH
           # - relationships:
           #     to: ref('model_name')
           #     field: field_name
+
+
+  - name: dim_location
+    description: Customers dimension table to store the unique location info.
+
+    columns:
+      - name: location_id
+        tests:
+          - unique
+          - not_null
+          # - relationships:
+          #     to: ref('model_name')
+          #     field: field_name
