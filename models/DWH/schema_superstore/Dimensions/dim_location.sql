@@ -13,7 +13,6 @@ location_set as (
 
     select distinct
 
-        row_number() over (order by (select null)) as location_id,
         country as location_country,
         city as location_city,
         state as location_state,
@@ -28,6 +27,7 @@ dim_location as (
 
     select
         
+        row_number() over (order by (select null)) as location_id,
         *
     
     from location_set

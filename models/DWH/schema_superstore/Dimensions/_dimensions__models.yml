@@ -10,7 +10,7 @@ models:  # dimensions of the DWH
           - unique
           - not_null
           # - relationships:
-          #     to: ref('model_name')
+          #     to: ref('fact_orders')
           #     field: field_name
 
 
@@ -22,9 +22,7 @@ models:  # dimensions of the DWH
         tests:
           - unique
           - not_null
-          # - relationships:
-          #     to: ref('model_name')
-          #     field: field_name
+
 
 
   - name: dim_location
@@ -35,9 +33,7 @@ models:  # dimensions of the DWH
         tests:
           - unique
           - not_null
-          # - relationships:
-          #     to: ref('model_name')
-          #     field: field_name
+
 
 
   - name: dim_product
@@ -48,6 +44,3 @@ models:  # dimensions of the DWH
         tests:
           - unique
           - not_null
-          # - relationships:
-          #     to: ref('model_name')
-          #     field: field_name
