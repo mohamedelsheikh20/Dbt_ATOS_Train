@@ -1,5 +1,8 @@
 version: 2
 
 models:  # config of the Queries 
-  - name: top_quantity_sold_products_per_year.sql
+  - name: top_quantity_sold_products_per_year
     description: Query to calculate the top sold product for each year.
+
+  - name: total_sales_per_category
+    description: Query to find the total sales for each category.

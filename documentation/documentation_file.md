@@ -38,6 +38,7 @@
       - [Orders fact](#Orders-fact)
 6. [Queries](#queries)
    - [Query 1: top quantity sold products per year](#query-1-top-quantity-sold-products-per-year)
+   - [Query 2: total sales for each category](#query-2-total-sales-for-each-category)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -86,6 +87,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
       * Schema_superstore/
         * Queries/
           * top_quantity_sold_products_per_year.sql
+          * total_sales_per_category.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -263,6 +265,23 @@ Query to calculate the top sold product for each year.
 - Finally, take the first rank of each year then group the id of the products to get the info about each product.
 
 
+### Query 2: total sales for each category
+
+#### path: models/marts/schema_superstore/Queries/total_sales_per_category.sql
+
+#### Description:
+
+Query to find the total sales for each category.
+
+
+- Join fact and date dimension using `product_id`.
+
+- Get the sum of sales for each `category`.
+
+- Finally, this query can be done for:
+  - product (category, sub_category).
+  - customer (segment, name).
+  - location (any of the location fields).
 
 ---
 ## Tests
