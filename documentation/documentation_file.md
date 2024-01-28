@@ -41,6 +41,7 @@
    - [Query 2: total sales for each category](#query-2-total-sales-for-each-category)
    - [Query 3: customers made many orders in the same day](#query-3-customers-made-many-orders-in-the-same-day)
    - [Query 4: top negative profit per city and states](#query-4-top-negative-profit-per-city-and-states)
+   - [Query 5: monthly sales growth percentage](#query-5-monthly-sales-growth-percentage)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -92,6 +93,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
           * total_sales_per_category.sql
           * customers_made_many_orders_same_day.sql
           * top_negative_profit_city_and_states.sql
+          * calculate_monthly_sales_growth_percentage.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -317,6 +319,22 @@ Query to get top city and states who make the profit be negative.
 
 - Group by `location_dim` to get the city and state of the negative profit.
 
+
+### Query 5: monthly sales growth percentage
+
+#### path: models/marts/schema_superstore/Queries/calculate_monthly_sales_growth_percentage.sql
+
+#### Description:
+
+Query to calculate the monthly sales growth percentage
+
+- Depending on the main equation of the monthly sales growth percentage:
+  - ((this month - previous month) / previous month) * 100
+
+- Get the sales per each month in each year.
+- Get the sales per each previous month using window function and (lag).
+- Do the equation in generated columns.
+- Round the output and add `%` to it, so it will be readable.
 
 ---
 ## Tests

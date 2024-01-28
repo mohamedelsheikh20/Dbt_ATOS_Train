@@ -12,3 +12,6 @@ models:  # config of the Queries
 
   - name: top_negative_profit_city_and_states
     description: Query to get top city and states who make the profit be negative.
+
+  - name: calculate_monthly_sales_growth_percentage
+    description: Query to calculate the monthly sales growth percentage.
