@@ -69,6 +69,7 @@ fact_orders as (
         dim_calendar_date_ship.date_id as ship_date_id,
 
         -- degenerated dimension
+        order_id,
         ship_mode as dd_ship_mode,
 
         -- measuers columns

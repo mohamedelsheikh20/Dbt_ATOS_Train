@@ -6,3 +6,6 @@ models:  # config of the Queries
 
   - name: total_sales_per_category
     description: Query to find the total sales for each category.
+
+  - name: customers_made_many_orders_same_day
+    description: Query to get customers who made more than one order in the same day

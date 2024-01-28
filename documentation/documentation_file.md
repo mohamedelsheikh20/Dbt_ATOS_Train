@@ -39,6 +39,7 @@
 6. [Queries](#queries)
    - [Query 1: top quantity sold products per year](#query-1-top-quantity-sold-products-per-year)
    - [Query 2: total sales for each category](#query-2-total-sales-for-each-category)
+   - [Query 3: customers made many orders in the same day](#query-3-customers-made-many-orders-in-the-same-day)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -88,6 +89,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
         * Queries/
           * top_quantity_sold_products_per_year.sql
           * total_sales_per_category.sql
+          * customers_made_many_orders_same_day.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -282,6 +284,24 @@ Query to find the total sales for each category.
   - product (category, sub_category).
   - customer (segment, name).
   - location (any of the location fields).
+
+
+### Query 3: customers made many orders in the same day
+
+#### path: models/marts/schema_superstore/Queries/customers_made_many_orders_same_day.sql
+
+#### Description:
+
+Query to get customers who made more than one order in the same day.
+
+
+- Group by `customer_id` and `order_date_id` to get all customers with all dates where `distinct order_id` is more than one order per customer per day.
+
+
+- Get the data using joining the calendar date and customer dimensions to get the:
+  - customer name.
+  - calendar dates (year, month and day).
+
 
 ---
 ## Tests
