@@ -37,7 +37,7 @@
    - [Fact model](#fact-model)
       - [Orders fact](#Orders-fact)
 6. [Queries](#queries)
-   - [Query 1: test](#test)
+   - [Query 1: top quantity sold products per year](#query-1-top-quantity-sold-products-per-year)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -82,10 +82,10 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
         * Facts/
           * _facts__models.yml
           * fact_orders.sql
-    * marts/  --update here...................
+    * marts/ 
       * Schema_superstore/
         * Queries/
-          *
+          * top_quantity_sold_products_per_year.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -242,203 +242,26 @@ As the image shows there are `Fact table` with four `Dimension tables`:
    1. Using left join to get all the fact rows.
    2. Join is on all distinct columns considered in the mentioned dimension.
 ---
-## Queries   // update here ..........................
+## Queries
 
 
 
-[//]: # (### Query 1: avg sale price borough)
+### Query 1: top quantity sold products per year
 
-[//]: # (#### path: models/marts/Schema_superstore/Queries/avg_sale_price_per_borough.sql )
+#### path: models/marts/schema_superstore/Queries/top_quantity_sold_products_per_year.sql
 
-[//]: # (#### Description:)
+#### Description:
 
-[//]: # (Query to calculate the average sale price per borough.)
+Query to calculate the top sold product for each year.
 
-[//]: # ()
-[//]: # (- Join fact and location dimension in `location_id`.)
 
-[//]: # (- Group by `borough_name` and get the `avg` of the `sale_price`.)
+- Join fact and date dimension using `order_date_id`.
 
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 2: neigh max units)
+- Group by `date_year` and `product_id` to get each product sum quantity per each year then rank this sum of quantity
+  in descending order.
 
-[//]: # (#### path: models/marts/Schema_superstore/Queries/most_total_units_per_neighbouhood.sql )
+- Finally, take the first rank of each year then group the id of the products to get the info about each product.
 
-[//]: # (#### Description:)
-
-[//]: # (Query to find the neighborhood with the most total units.)
-
-[//]: # ()
-[//]: # (- Join fact and location dimension in `location_id`.)
-
-[//]: # (- Group by `neighborhood`.)
-
-[//]: # (- Get the max `total_units_int` without any nulls or zeros.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 3: build class cat)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/building_class_category_of_highest_avg_land_square_feet.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to identify the building class category with the highest average land square feet.)
-
-[//]: # ()
-[//]: # (- Join fact and building dimension in `building_class_id`.)
-
-[//]: # (- Group by `building_class_category`.)
-
-[//]: # (- Finally, analyze the output of the price with `sum - avg - min - max`.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 4: different dim building)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/count_NumOf_building_by_different_dims.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to Count the number of buildings by different dimensions using only &#40;borough - lot - block&#41;.)
-
-[//]: # ()
-[//]: # (- No need to fact because we only need to count the building by different dimensions.)
-
-[//]: # (- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.)
-
-[//]: # (- Group by the output one time for the 3 dimension `borough_name, tax_lot, tax_block`.)
-
-[//]: # (- Union the output with `concate each one of 3 dim with the name corresponding to it`.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 5: total sale over time)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/total_SalePrice_over_different_date_parts.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to calculate the total sale price over time by different date parts.)
-
-[//]: # ()
-[//]: # (- Join fact and calendar date dimension in `sale_date_id`.)
-
-[//]: # (- Do operation on each year using `where` and group by month for each year months.)
-
-[//]: # (- Finally, union all the results together.)
-
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 6: tax class avg sale)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/avg_SalePrice_of_tax_present_sale_combinations.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to group the data by tax class at present and tax class at time of sale and compare the average sale price for each combination.)
-
-[//]: # ()
-[//]: # (- Join fact and tax dimension in `tax_class_id`.)
-
-[//]: # (- Group by `tax_class_at_sale and tax_class_at_present` get the avg `sale_price`.)
-
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 7: five expensive buildings)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/top_five_expensive_buildings_per_SalePrice.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to identify the top 5 most expensive buildings based on sale price.)
-
-[//]: # ()
-[//]: # (- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.)
-
-[//]: # (- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.)
-
-[//]: # (- Remove null, and order descending to get the first/max five buildings.)
-
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 8: window fun sale price)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/window_fun_calculate_SalePrice_RunningTotal.sql)
-
-[//]: # (#### Description:)
-
-[//]: # (Query to use a window function to calculate the running total of Sales price.)
-
-[//]: # ()
-[//]: # (- Join fact and calendar date dimension in `sale_date_id`.)
-
-[//]: # (- Using window function to calculate the running total of Sales price `order by year, month then day` then sum the price.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 9: analyze dist diff years sale price)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/analyze_distrib_SalePrice_per_diff_SaleBuiltYears.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to create a new column with the difference in years between sale date and year built. Group the data by this new column and analyze the distribution of sale price.)
-
-[//]: # ()
-[//]: # (- Do the year difference by doing some operation on IDs of dates &#40;numeric values&#41;.)
-
-[//]: # (  -     sale_date_id like "20181212" / 10000 = 2018.1212 using cast int will be the year "2018")
-
-[//]: # (        year_built_date will be like "1996")
-
-[//]: # ()
-[//]: # (- remove any negative results `wrong input`.)
-
-[//]: # (- Finally, analyze the output of the price with `sum - avg - min - max`.)
-
-[//]: # ()
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 10: find buildings sold multiple times)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/compare_SalePrice_of_building_sold_multiple_times.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to implement a logic to find buildings sold multiple times and compare their sale price across each transaction.)
-
-[//]: # ()
-[//]: # (- Get the `distinct borough_name, tax_lot, tax_block` of the dim to get the unique building, with first `min` id of each building.)
-
-[//]: # (- Join fact and location dimension in `location_id`, using `inner join` to neglect columns neighbourhood - zip code.)
-
-[//]: # (- Select all buildings and use rank window function to rank sale price for each building.)
-
-[//]: # ()
-[//]: # ()
-[//]: # (### Query 11: building age sale price)
-
-[//]: # (#### path: models/marts/Schema_superstore/Queries/relation_BuildingAge_of_YearBuilt_with_SalePrice.sql )
-
-[//]: # (#### Description:)
-
-[//]: # (Query to determine the building age category based on year built, and then use it to analyze the relationship between )
-
-[//]: # (building age and sale price.)
-
-[//]: # ()
-[//]: # (- No need to dimension because year built id are column with numeric meaning value.)
-
-[//]: # (- Select fact and remove `1111` values which is wrong values, but `0` is normal unknown values.)
-
-[//]: # (- Group by `year_built_date_id`.)
-
-[//]: # (- Finally, analyze the output of the price with `sum - avg - min - max`.)
 
 
 ---
