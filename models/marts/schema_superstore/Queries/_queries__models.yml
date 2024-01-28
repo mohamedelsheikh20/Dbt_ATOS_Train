@@ -15,3 +15,6 @@ models:  # config of the Queries
 
   - name: calculate_monthly_sales_growth_percentage
     description: Query to calculate the monthly sales growth percentage.
+
+  - name: ship_order_diff_dates_relation_with_ship_mode
+    description: Query to get the realtion between ship mode and min-max days of shipping.

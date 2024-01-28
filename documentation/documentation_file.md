@@ -42,6 +42,7 @@
    - [Query 3: customers made many orders in the same day](#query-3-customers-made-many-orders-in-the-same-day)
    - [Query 4: top negative profit per city and states](#query-4-top-negative-profit-per-city-and-states)
    - [Query 5: monthly sales growth percentage](#query-5-monthly-sales-growth-percentage)
+   - [Query 6: difference between ship and order dates and the relation with the ship mode](#query-6-difference-between-ship-and-order-dates-and-the-relation-with-the-ship-mode)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -94,6 +95,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
           * customers_made_many_orders_same_day.sql
           * top_negative_profit_city_and_states.sql
           * calculate_monthly_sales_growth_percentage.sql
+          * ship_order_diff_dates_relation_with_ship_mode.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -335,6 +337,20 @@ Query to calculate the monthly sales growth percentage
 - Get the sales per each previous month using window function and (lag).
 - Do the equation in generated columns.
 - Round the output and add `%` to it, so it will be readable.
+
+
+### Query 6: difference between ship and order dates and the relation with the ship mode
+
+#### path: models/marts/schema_superstore/Queries/ship_order_diff_dates_relation_with_ship_mode.sql
+
+#### Description:
+
+Query to get the relation between ship mode and min-max days of shipping.
+
+- Depending on the difference of order and ship dates, I will get the difference in days.
+- Get the min max number of days with each `dd_ship_mode`.
+
+- I let all measures, so I can get any relationship I want with measures.
 
 ---
 ## Tests
