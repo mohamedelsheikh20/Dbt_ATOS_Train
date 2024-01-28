@@ -110,9 +110,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
 
 Using website [dbdiagram](https://dbdiagram.io/).
 
-// update here ..................................
-
-[//]: # (![SuperStore System]&#40;https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/861ba231-e918-4a2e-9290-609272e72b6d&#41;)
+![SuperStore System](https://github.com/mohamedelsheikh20/Dbt_ATOS_Train/assets/65075222/c20ad36d-350a-478a-bb1e-c6ffe7b38fcf)
 
 As the image shows there are `Fact table` with four `Dimension tables`:
 1. Orders Fact Table:
