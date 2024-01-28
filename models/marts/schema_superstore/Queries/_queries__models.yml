@@ -8,4 +8,7 @@ models:  # config of the Queries
     description: Query to find the total sales for each category.
 
   - name: customers_made_many_orders_same_day
-    description: Query to get customers who made more than one order in the same day
+    description: Query to get customers who made more than one order in the same day.
+
+  - name: top_negative_profit_city_and_states
+    description: Query to get top city and states who make the profit be negative.

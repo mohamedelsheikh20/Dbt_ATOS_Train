@@ -40,6 +40,7 @@
    - [Query 1: top quantity sold products per year](#query-1-top-quantity-sold-products-per-year)
    - [Query 2: total sales for each category](#query-2-total-sales-for-each-category)
    - [Query 3: customers made many orders in the same day](#query-3-customers-made-many-orders-in-the-same-day)
+   - [Query 4: top negative profit per city and states](#query-4-top-negative-profit-per-city-and-states)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -90,6 +91,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
           * top_quantity_sold_products_per_year.sql
           * total_sales_per_category.sql
           * customers_made_many_orders_same_day.sql
+          * top_negative_profit_city_and_states.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -301,6 +303,19 @@ Query to get customers who made more than one order in the same day.
 - Get the data using joining the calendar date and customer dimensions to get the:
   - customer name.
   - calendar dates (year, month and day).
+
+
+### Query 4: top negative profit per city and states
+
+#### path: models/marts/schema_superstore/Queries/top_negative_profit_city_and_states.sql
+
+#### Description:
+
+Query to get top city and states who make the profit be negative.
+
+- Get the location with the sum of profit less than 0 `negative profits`.
+
+- Group by `location_dim` to get the city and state of the negative profit.
 
 
 ---
