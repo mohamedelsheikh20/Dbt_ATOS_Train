@@ -286,7 +286,9 @@ Query to find the total sales for each category.
 ---
 ## Tests
 
-There is no tests implemented yet.
+All tests are considered in the `yml` files.
+* dimensions_models: unique and not null tests.
+* facts_models: all the relationships between (FKs and PKs).
 
 ---
 ## Common Issues
