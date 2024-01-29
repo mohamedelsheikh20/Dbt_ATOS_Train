@@ -43,6 +43,7 @@
    - [Query 4: top negative profit per city and states](#query-4-top-negative-profit-per-city-and-states)
    - [Query 5: monthly sales growth percentage](#query-5-monthly-sales-growth-percentage)
    - [Query 6: difference between ship and order dates and the relation with the ship mode](#query-6-difference-between-ship-and-order-dates-and-the-relation-with-the-ship-mode)
+   - [Query 7: Average profit margin for each subcategory](#query-7-Average-profit-margin-for-each-subcategory)
 7. [Tests](#tests)
 8. [Common Issues](#common-issues)
    - [Business Cases](#Business-Cases)
@@ -96,6 +97,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
           * top_negative_profit_city_and_states.sql
           * calculate_monthly_sales_growth_percentage.sql
           * ship_order_diff_dates_relation_with_ship_mode.sql
+          * avg_profit_margin_per_subcategory.sql
     * staging/
       * Schema_superstore/
         * _schema_superstore__models.yml
@@ -349,6 +351,21 @@ Query to get the relation between ship mode and min-max days of shipping.
 - Get the min max number of days with each `dd_ship_mode`.
 
 - I let all measures, so I can get any relationship I want with measures.
+
+
+
+### Query 7: Average profit margin for each subcategory
+
+#### path: models/marts/schema_superstore/Queries/avg_profit_margin_per_subcategory.sql
+
+#### Description:
+
+Query to find the average profit margin for each product sub-category.
+
+- Using the equation `(profit / sales)` to get the profit margin for the products sub categories.
+- Get the average of the output column.
+
+- Display the data with the specific sub category.
 
 ---
 ## Tests

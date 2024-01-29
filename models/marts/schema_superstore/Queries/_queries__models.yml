@@ -18,3 +18,6 @@ models:  # config of the Queries
 
   - name: ship_order_diff_dates_relation_with_ship_mode
     description: Query to get the realtion between ship mode and min-max days of shipping.
+
+  - name: avg_profit_margin_per_subcategory
+    description: Query to find the average profit margin for each product sub-category.
