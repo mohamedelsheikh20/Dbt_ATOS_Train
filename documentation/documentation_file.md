@@ -91,6 +91,7 @@ You need to set up your `yml` files depending on your snowflake dataset, but in 
     * marts/ 
       * Schema_superstore/
         * Queries/
+          * _queries__models.yml
           * top_quantity_sold_products_per_year.sql
           * total_sales_per_category.sql
           * customers_made_many_orders_same_day.sql
