@@ -60,49 +60,77 @@ GROUP BY
 
 ### Ex 1: new SQL code
 ```
--- Identify the salespersons with the highest sales for each quarter of the year for the past two years
-all_sales_persons as (
+with 
+
+-- past 2 years data
+past_two_years_sales as (
     select
-    
-        quarters.quarter_name,
-        sales_transactions.salesperson_id,
-        sum(sales_transactions.order_amount) as total_sales,
-        rank() over (
-            partition by quarters.quarter_name
-            order by sum(sales_transactions.order_amount) desc
-        ) as rnk
-    
-    from sales_transactions
-    
-    join quarters on 
-        sales_transactions.transaction_date between quarters.start_date and quarters.end_date
         
-    where
-        sales_transactions.transaction_date >= dateadd(Year, -2, getdate())
-    
-    group by
-        quarters.quarter_name,
-        sales_transactions.salesperson_id
+        salesperson_id,
+        transaction_date,
+        order_amount,
+        extract(year from sales_transactions.transaction_date) as transaction_year, 
+        year(getdate()) AS current_year
+        
+    from sales_transactions
+    where 
+        transaction_year = current_year - 1 or  -- past year
+        transaction_year = current_year - 2     -- past second year
 ),
 
--- get the highest salesperson for each quarter
+-- sum per each quarter
+sum_per_each_querter as (
+    
+    select 
+    
+        quarters.quarter_name,
+        past_two_years_sales.salesperson_id,
+        sum(past_two_years_sales.order_amount) as total_sales
+    
+    from past_two_years_sales
+    
+    join quarters on 
+        past_two_years_sales.transaction_date between quarters.start_date and quarters.end_date
+        
+    group by
+        quarters.quarter_name,
+        past_two_years_sales.salesperson_id
+),
+
+-- max seller per each quarter
+max_sales_per_quarter as (
+
+    select
+    
+        quarter_name,
+        max(total_sales) as max_total_sales
+    
+    from sum_per_each_querter
+
+    group by
+        quarter_name
+)
+
+-- join to get the id of person who has the max sales amount
 select
 
-    quarter_name,
-    salesperson_id,
-    total_sales
+    max_sales_per_quarter.quarter_name,
+    sum_per_each_querter.salesperson_id,
+    max_sales_per_quarter.max_total_sales
 
-from all_sales_persons
-
-where
-    rnk = 1
+from max_sales_per_quarter
+join sum_per_each_querter on 
+    max_sales_per_quarter.quarter_name = sum_per_each_querter.quarter_name and
+    max_sales_per_quarter.max_total_sales = sum_per_each_querter.total_sales
 ```
 
 ### **Example 1: updates**
 * lower all statement and improve the structure (spaces, removing leading words like `as X`)
 * there is no need to join and group by `salespeople` because we use only the id (in this business case).
-* add where statement to get only the past 2 years
-* add rank window function to make the highest salesperson = 1 using descending order of `order_amount` sum.
+* get the past 2 years only from the current date year.
+* get sum of sales for each quarter for each sales person.
+* get the max sales per each quarter.
+* join with the sum of sales to get the sales person id.
 ---
 
 
@@ -123,29 +151,46 @@ LIMIT 5
 
 ### Ex 2: new SQL code
 ```
-select
+with 
 
-    sales_transactions.salesperson_id,
-    sum(sales_transactions.order_amount) as total_sales
+-- get the year data
+year_data as (
+    select
+    
+        salesperson_id,
+        order_amount,
+        extract(year from transaction_date) as order_year,
+        year(getdate()) AS current_year
+    
+    from sales_transactions
+    
+    where transaction_date = current_year - 1
 
-from sales_transactions
+),
 
-where 
-    extract(year from sales_transactions.transaction_date) = 2023
+-- get the top 5 sales person
+top_five_sales_person as (
+    select
+    
+        salesperson_id,
+        sum(order_amount) as total_sales_per_person
+    
+    from year_data
+    group by salesperson_id
+    
+    order by total_sales_per_person desc
+    limit 5
 
-group by
-    sales_transactions.salesperson_id
+)
 
-order by
-    total_sales desc
-
-limit 5
+select * from top_five_sales_person
 ```
 
 ### **Example 2: updates**
 * lower all statement and improve the structure (spaces, removing leading words like `as X`)
 * there is no need to join and group by `salespeople` because we use only the id (in this business case).
-* assume that the use case want certain year like `2023`, so I added it into the `where` statement.
+* get the year data (current = -0), (past = -1), etc..
+* select the top 5 sales persons using `limit 5`.
 ---
 
 
@@ -209,7 +254,7 @@ HAVING COUNT(*) > 1
 
 ### Ex 4: new SQL code
 ```
-select 
+select distinct
 
   employee_id,
   last_name,
@@ -219,21 +264,11 @@ select
   salary
 
 from employee
-
-group by   
-  employee_id,
-  last_name,
-  first_name,
-  dept_id,
-  manager_id,
-  salary
-
-having count(*) > 1
 ```
 
 ### **Example 4: updates**
 * lower all statement and improve the structure (spaces, removing leading words like `as X`)
-* there is no updates in main code flow.
+* select distinct values only to remove all duplicates.
 ---
 
 
@@ -314,20 +349,29 @@ WHERE sales NOT IN (SELECT MAX(sales) FROM Sales_orders )) as 2ND_max_sales;
 
 ### Ex 6: new SQL code
 ```
+with 
+
+get_max_2_sales as (
+    select
+    
+        sales
+    
+    from Sales_orders
+    order by sales desc
+    limit 2
+)
+
+
 select
-
-    sales
-
-from Sales_orders
-
-order by sales desc
-limit 2
+    (select max(sales) from get_max_2_sales) as max_sales,
+    (select min(sales) from get_max_2_sales) as second_max_sales
 
 ```
 
 ### **Example 6: updates**
 * lower all statement and improve the structure (spaces, removing leading words like `as X`)
-* order sales and get the max 2 only.
+* get the max 2 values from the table.
+* get the max one and the remain one will be the min (because there are only 2 values).
 
 > depending on business case output we can use or add window function.
 ---
@@ -363,75 +407,64 @@ WHERE Essn=Ssn AND Lname=‘Smith’ )
 ```
 with
 
--- get the projects where `John Smith` works, where his Ssn =‘123456789’
+-- get all projects where smith manage it's department 
+john_smith_manage as (
+
+    select distinct
+    
+        project.Pnumber
+    
+    from project
+  
+    join department on 
+        project.Dnum = department.Dnumber
+        
+    join employee on 
+        department.mgr_ssn = employee.Ssn
+    
+    where employee.Ssn = 123456789
+ 
+),
+
+-- get all projects where smith worked in 
 john_smith_projects as (
 
-   select
-   
-      project.Pnumber,
-      project.Dnum
-         
-   from project
-   
-   where
-      works_on.Essn = 123456789
-   
-   join works_on on
-      project.Pnumber = works_on.Pno
+    select distinct
       
+        works_on.Pno as Pnumber
+  
+    from works_on
+      
+    join employee on 
+        works_on.Essn = employee.Ssn
+
+    where employee.Ssn = 123456789
+    
 ),
 
--- get all empolyees working on the projects where john smith works
-john_smith_colleges as (
-   
-   select distinct
-   
-      works_on.Essn as Ssn
-   
-   from works_on
-   
-   where Pno in (select Pnumber from john_smith_projects)
-),
-
--- get the department managers of the projects where john smith works
-projects_managers as (
-   
-   select distinct
-   
-      department.mgr_ssn as Ssn
-   
-   from john_smith_projects
-   
-   left join department on
-      john_smith_projects.Dnum = department.Dnumber
-
-),
-
-show_all as (
+-- union data (using union to remove duplicates)
+smith_departments_projects as (
 
     select
         *
-    from john_smith_colleges
+    from john_smith_manage
     
     union
-    
+
     select
         *
-    from projects_managers
+    from john_smith_projects
     
 )
 
-select
-    
-    employee.Ssn,
-    employee.Fname,
-    employee.Lname
-    
-from show_all
+select distinct
 
-join employee on
-    employee.Ssn = show_all.Ssn
+    works_on.Essn
 
+from smith_departments_projects
+
+join works_on on
+    works_on.Pno = smith_departments_projects.Pnumber
 ```
 
 ### **Example 7: updates**
@@ -439,10 +472,8 @@ join employee on
 * lower all statement and improve the structure (spaces, removing leading words like `as X`).
 * as shown above I have assumed the tables and what it contains.
 * CTEs:
-  1. get the projects where `John Smith` works, where his Ssn = `123456789` because it is a unique number.
-  2. get all distinct (unique) employees working on the projects where john smith works.
-  3. get the distinct department managers of the projects where john smith works.
-  4. union both `employees` and `managers` in one table.
-  5. Finally, join with table `employee` to get the `Fname` and `Lname`.
-> depending on business case, I assumed this using the old SQL query solution.
+  1. get all projects where `John Smith` manage its department, where his Ssn = `123456789` because it is a unique number.
+  2. get all projects where smith worked in.
+  3. union data to get all project numbers which `smith` manage and work in.
+  4. join the output of union with the `works_on` table to get all employees who worked in the same projects.
 ---
